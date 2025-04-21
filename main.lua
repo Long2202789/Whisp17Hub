@@ -1,4 +1,4 @@
--- Whisp17 GUI + AutoFarm bên trong
+-- Whisp17 Hub - Full GUI + Auto Farm hoạt động
 local ScreenGui = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -9,6 +9,7 @@ local CloseBtn = Instance.new("TextButton")
 ScreenGui.Name = "Whisp17Hub"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+-- Giao diện chính
 Main.Name = "Main"
 Main.Parent = ScreenGui
 Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -20,6 +21,7 @@ Main.Draggable = true
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = Main
 
+-- Tiêu đề
 Title.Name = "Title"
 Title.Parent = Main
 Title.BackgroundTransparency = 1
@@ -30,6 +32,7 @@ Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 22
 
+-- Nút Auto Farm
 AutoFarmBtn.Name = "AutoFarmBtn"
 AutoFarmBtn.Parent = Main
 AutoFarmBtn.BackgroundColor3 = Color3.fromRGB(70, 140, 255)
@@ -39,10 +42,9 @@ AutoFarmBtn.Font = Enum.Font.GothamBold
 AutoFarmBtn.Text = "▶️ Auto Farm"
 AutoFarmBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AutoFarmBtn.TextSize = 18
+Instance.new("UICorner", AutoFarmBtn).CornerRadius = UDim.new(0, 8)
 
-local BtnCorner = Instance.new("UICorner", AutoFarmBtn)
-BtnCorner.CornerRadius = UDim.new(0, 8)
-
+-- Nút Close
 CloseBtn.Name = "CloseBtn"
 CloseBtn.Parent = Main
 CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 70, 70)
@@ -52,19 +54,21 @@ CloseBtn.Font = Enum.Font.Gotham
 CloseBtn.Text = "❌ Close"
 CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 16
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
-local BtnCorner2 = Instance.new("UICorner", CloseBtn)
-BtnCorner2.CornerRadius = UDim.new(0, 8)
-
+-- Chức năng Auto Farm hoạt động
 AutoFarmBtn.MouseButton1Click:Connect(function()
     _G.AutoFarm = true
+
     while _G.AutoFarm do
-        wait(0.3)
+        task.wait(0.3)
         pcall(function()
             local player = game.Players.LocalPlayer
             local char = player.Character or player.CharacterAdded:Wait()
             local hrp = char:FindFirstChild("HumanoidRootPart")
-            local remote = game:GetService("ReplicatedStorage").Remotes.Combat
+            local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):FindFirstChild("Combat")
+
+            if not hrp or not remote then return end
 
             local closest, dist = nil, math.huge
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
@@ -85,6 +89,7 @@ AutoFarmBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Nút đóng GUI
 CloseBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
